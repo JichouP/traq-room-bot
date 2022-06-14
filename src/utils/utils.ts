@@ -23,10 +23,8 @@ export const connectMock =
     dbName: 'jest-routes' | 'jest-models' | 'jest-integration'
   ) =>
   async (): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     await mongoose.connect((global as any).__MONGO_URI__, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
       dbName,
     });
   };

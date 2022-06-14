@@ -7,6 +7,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/ping', (_, res) => {
+  res.status(200);
+  res.send('pong');
+});
+
 app.use('/', notFoundHandler);
 app.use(internalServerErrorHandler);
 
