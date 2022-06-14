@@ -1,4 +1,5 @@
 import express from 'express';
+import morgan from 'morgan';
 import internalServerError from './controllers/internalServerError';
 import notFound from './controllers/notFound';
 import root from './routes/root';
@@ -7,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+app.use(morgan('combined', { skip: (_req, res) => res.statusCode < 400 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
