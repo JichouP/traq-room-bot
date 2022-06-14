@@ -11,11 +11,10 @@ import root from './routes/root';
 
 dotenv.config();
 
-const { PORT, SESSION_SECRET, MONGO_URL, DB_NAME } = process.env;
+const { PORT, SESSION_SECRET, MONGO_URL } = process.env;
 if (!PORT) throw new Error('env PORT is not defined');
 if (!SESSION_SECRET) throw new Error('env SESSION_SECRET is not defined');
 if (!MONGO_URL) throw new Error('env MONGO_URL is not defined');
-if (!DB_NAME) throw new Error('env DB_NAME is not defined');
 
 const app = express();
 
@@ -28,7 +27,6 @@ app.use(
     secret: SESSION_SECRET,
     store: MongoStore.create({
       mongoUrl: MONGO_URL,
-      dbName: DB_NAME,
     }),
     resave: false,
     saveUninitialized: false,
