@@ -29,7 +29,10 @@
     ]
   },
   "dependencies": {
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^16.0.1",
     "express": "^5.0.0-beta.1",
+    "express-session": "^1.17.3",
     "mongoose": "^6.3.8",
     "morgan": "^1.10.0",
     "serve-favicon": "^2.5.0",
@@ -42,6 +45,7 @@
     "@babel/preset-typescript": "^7.17.12",
     "@shelf/jest-mongodb": "^3.0.1",
     "@swc/core": "^1.2.198",
+    "@types/express-session": "^1.17.4",
     "@types/jest": "^28.1.1",
     "@types/morgan": "^1.9.3",
     "@types/serve-favicon": "^2.5.3",
