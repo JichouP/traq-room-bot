@@ -1,6 +1,6 @@
 {
   "name": "traq-room-bot",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "keywords": [],
   "homepage": "https://github.com/JichouP/traq-room-bot#readme",
@@ -11,9 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/JichouP/traq-room-bot.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "author": "",
-  "main": "index.js",
+  "main": "src/main.ts",
   "scripts": {
     "start": "ts-node --files -r tsconfig-paths/register src/main.ts",
     "test": "jest",
