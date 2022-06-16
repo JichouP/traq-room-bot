@@ -9,7 +9,7 @@ http_proxy: 3000
 https: "hard"
 
 branch:
-  master:
+  main:
     expose: null
 
 cname: room.trap.games
