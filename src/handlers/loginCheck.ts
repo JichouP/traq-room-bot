@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import traqGetMe from '@/traQ/me';
+import traqGetMe from '@/traQ/traqGetMe';
 
 const loginCheck: RequestHandler = async (req, res, next) => {
   if (!req.session || !req.session.user) {

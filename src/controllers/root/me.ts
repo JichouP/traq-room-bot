@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import traqGetMe from '@/traQ/me';
+import traqGetMe from '@/traQ/traqGetMe';
 
 export const getMe: RequestHandler = async (req, res) => {
   const token = req.session.user?.token;
