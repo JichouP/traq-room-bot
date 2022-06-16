@@ -6,7 +6,6 @@ import { CreateDoc, FilterQuery } from 'mongoose';
 export interface UserSchema extends Base {}
 @modelOptions({
   schemaOptions: {
-    id: false,
     collection: 'users',
   },
 })

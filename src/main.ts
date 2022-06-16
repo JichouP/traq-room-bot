@@ -1,14 +1,22 @@
 import path from 'path';
 import MongoStore from 'connect-mongo';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import session from 'express-session';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import serveFavicon from 'serve-favicon';
 import internalServerError from './controllers/internalServerError';
 import notFound from './controllers/notFound';
 import root from './routes/root';
+
+declare module 'express-session' {
+  interface SessionData {
+    views: number;
+  }
+}
 
 dotenv.config();
 
@@ -26,7 +34,13 @@ if (process.env.NODE_ENV !== 'test') {
 const app = express();
 
 app.set('trust proxy', 1);
-
+app.use(helmet({}));
+app.use(
+  cors({
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(morgan('combined', { skip: (_req, res) => res.statusCode < 400 }));
 app.use(serveFavicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
@@ -36,16 +50,14 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(
     session({
       secret: SESSION_SECRET,
+      cookie: {
+        maxAge: 365 * 24 * 60 * 60 * 1000,
+      },
       store: MongoStore.create({
         mongoUrl: MONGO_URL,
       }),
       resave: false,
       saveUninitialized: false,
-      cookie: {
-        domain: 'localhost',
-        httpOnly: false,
-        secure: false,
-      },
     })
   );
 }
