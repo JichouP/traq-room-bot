@@ -6,6 +6,7 @@ import { CreateDoc, FilterQuery } from 'mongoose';
 export interface UserSchema extends Base {}
 @modelOptions({
   schemaOptions: {
+    id: false,
     collection: 'users',
   },
 })
@@ -13,8 +14,11 @@ export class UserSchema extends TimeStamps {
   @prop({ required: true, unique: true })
   public trapId!: string;
 
-  @prop({ required: false, default: null })
-  public deletedAt?: Date | null;
+  @prop({ required: true })
+  public name!: string;
+
+  @prop({ required: true })
+  public token!: string;
 }
 
 export const userModel = getModelForClass(UserSchema);
@@ -32,6 +36,9 @@ export class User {
   }
   public async create(user: CreateDoc<UserSchema>): Promise<UserSchema> {
     return userModel.create(user);
+  }
+  public async deleteByTrapId(trapId: string) {
+    return userModel.deleteMany({ trapId });
   }
 }
 

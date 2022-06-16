@@ -10,11 +10,14 @@ import morgan from 'morgan';
 import serveFavicon from 'serve-favicon';
 import internalServerError from './controllers/internalServerError';
 import notFound from './controllers/notFound';
+import oauth from './controllers/root/oauth';
+import loginCheck from './handlers/loginCheck';
+import { UserSchema } from './models/user';
 import root from './routes/root';
 
 declare module 'express-session' {
   interface SessionData {
-    views: number;
+    user: UserSchema;
   }
 }
 
@@ -61,6 +64,10 @@ if (process.env.NODE_ENV !== 'test') {
     })
   );
 }
+
+app.get('/oauth', oauth);
+
+app.use(loginCheck);
 
 app.use('/', root);
 
