@@ -29,9 +29,7 @@ export class User {
   ): Promise<UserSchema[]> {
     return userModel.find(q).exec();
   }
-  public async findOne(
-    q: FilterQuery<UserSchema> = {}
-  ): Promise<UserSchema | null> {
+  public async findOne(q: FilterQuery<UserSchema>): Promise<UserSchema | null> {
     return userModel.findOne(q).exec();
   }
   public async create(user: CreateDoc<UserSchema>): Promise<UserSchema> {
