@@ -1,60 +1,40 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { CreateDoc, FilterQuery } from 'mongoose';
+// import * as mongoose from 'mongoose';
 
-interface UserSchema {
-  name: string;
-  createdAt?: Date;
-}
-export interface UserDocument extends Document, UserSchema {}
-
-const userSchema = new Schema<UserDocument>(
-  {
-    name: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+export interface UserSchema extends Base {}
+@modelOptions({
+  schemaOptions: {
+    id: false,
+    collection: 'users',
   },
-  { collection: 'user' }
-);
+})
+export class UserSchema extends TimeStamps {
+  @prop({ required: true, unique: true })
+  public trapId!: string;
 
-export const UserModel = mongoose.model<UserDocument>('User', userSchema);
+  @prop({ required: false, default: null })
+  public deletedAt?: Date | null;
+}
 
-export default {
-  find: async (query: Record<string, unknown>): Promise<UserDocument | null> =>
-    new Promise((res, rej) => {
-      UserModel.findOne(query).exec((err, doc) => {
-        if (err) {
-          return rej(err);
-        }
-        res(doc);
-      });
-    }),
-  findList: async (): Promise<UserDocument[]> =>
-    new Promise((res, rej) => {
-      UserModel.find().exec((err, docs) => {
-        if (err) {
-          rej(err);
-        }
-        res(docs);
-      });
-    }),
-  create: async (user: { name: string }): Promise<UserDocument> =>
-    new Promise((res, rej) => {
-      if (!user || !user.name) {
-        return rej(new Error());
-      }
-      const newUser = new UserModel({
-        name: user.name,
-      });
-      newUser.save((err, doc) => {
-        if (err) {
-          rej(err);
-        }
-        res(doc);
-      });
-    }),
-};
+export const userModel = getModelForClass(UserSchema);
+
+export class User {
+  public async findList(
+    q: FilterQuery<typeof userModel> = {}
+  ): Promise<UserSchema[]> {
+    return userModel.find(q).exec();
+  }
+  public async findOne(
+    q: FilterQuery<typeof userModel> = {}
+  ): Promise<UserSchema | null> {
+    return userModel.findOne(q).exec();
+  }
+  public async create(user: CreateDoc<UserSchema>): Promise<UserSchema> {
+    return userModel.create(user);
+  }
+}
+
+export const user = new User();
+export default user;

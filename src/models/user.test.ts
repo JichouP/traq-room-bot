@@ -1,49 +1,55 @@
-import mongoose from 'mongoose';
-import User, { UserModel, UserDocument } from './user';
+import mongoose, { CreateDoc } from 'mongoose';
+import { userModel, UserSchema, user } from './user';
 import { connectMock, disconnectMock } from '@/utils/utils';
 
-const initUsers = [{ name: 'user1' }, { name: 'user2' }, { name: 'user3' }];
-let users: UserDocument[] = [];
+const initUsers = [
+  { trapId: 'user1' },
+  { trapId: 'user2' },
+  { trapId: 'user3' },
+];
+let users: UserSchema[] = [];
 
 describe('model/user', () => {
   beforeAll(connectMock(mongoose, 'jest-models'));
   beforeEach(async () => {
-    await UserModel.deleteMany({});
-    users = await UserModel.insertMany(initUsers);
+    await userModel.deleteMany({});
+    users = await userModel.insertMany(initUsers);
   });
   afterAll(disconnectMock(mongoose));
 
   describe('findList', () => {
     test('should get user list', async () => {
-      const docs = await User.findList();
+      const docs = await user.findList();
       expect(docs.length).toBe(3);
     });
   });
   describe('find', () => {
     test('should get user', async () => {
-      const doc = await User.find({ _id: users[0]._id });
+      const doc = await user.findOne({ _id: users[0]._id });
       if (!doc) {
         return;
       }
-      expect(doc.name).toEqual(users[0].name);
+      expect(doc.trapId).toEqual(users[0].trapId);
       expect(doc.createdAt instanceof Date).toBeTruthy();
       expect(mongoose.isValidObjectId(doc._id)).toBeTruthy();
     });
     test('should fail to get user', async () => {
-      await expect(User.find({ _id: '' })).rejects.toThrow();
+      await expect(user.findOne({ _id: '' })).rejects.toThrow();
     });
   });
   describe('create', () => {
     test('should create user', async () => {
-      const doc = await User.create({ name: 'user4' });
-      expect(doc.name).toBe('user4');
+      const doc = await user.create({ trapId: 'user4' });
+      expect(doc.trapId).toBe('user4');
     });
     describe('validation', () => {
       test('should fail to create duplicate user', async () => {
-        await expect(User.create({ name: 'user1' })).rejects.toThrow();
+        await expect(user.create({ trapId: 'user1' })).rejects.toThrow();
       });
       test('should fail to create blank user', async () => {
-        await expect(User.create({} as UserDocument)).rejects.toThrow();
+        await expect(
+          user.create({} as CreateDoc<UserSchema>)
+        ).rejects.toThrow();
       });
     });
   });
