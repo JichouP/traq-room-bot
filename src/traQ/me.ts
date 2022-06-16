@@ -25,7 +25,7 @@ type MeResponse = {
   homeChannel: string;
 };
 
-const me = async (token: string) => {
+const traqGetMe = async (token: string) => {
   const data = await axios.get<MeResponse>(
     'https://q.trap.jp/api/v3/users/me',
     {
@@ -38,4 +38,4 @@ const me = async (token: string) => {
   return data;
 };
 
-export default me;
+export default traqGetMe;

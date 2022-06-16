@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { CLIENT_ID } from '@/env';
 import { user } from '@/models/user';
-import me from '@/traQ/me';
+import traqGetMe from '@/traQ/me';
 import postForm from '@/utils/postForm';
 
 type TokenResponse = {
@@ -27,7 +27,7 @@ const oauth: RequestHandler = async (req, res) => {
       code,
     }
   );
-  const { data: meData } = await me(tokenData.access_token);
+  const { data: meData } = await traqGetMe(tokenData.access_token);
 
   // delete old data
   await user.deleteByTrapId(meData.id);
@@ -40,7 +40,11 @@ const oauth: RequestHandler = async (req, res) => {
   });
 
   req.session.user = newUser;
-  res.sendStatus(200);
+  res
+    .status(200)
+    .send(
+      'You have successfully registered. Please close this page and read the QR code again.'
+    );
 };
 
 export default oauth;

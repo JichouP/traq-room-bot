@@ -25,12 +25,12 @@ export const userModel = getModelForClass(UserSchema);
 
 export class User {
   public async findList(
-    q: FilterQuery<typeof userModel> = {}
+    q: FilterQuery<UserSchema> = {}
   ): Promise<UserSchema[]> {
     return userModel.find(q).exec();
   }
   public async findOne(
-    q: FilterQuery<typeof userModel> = {}
+    q: FilterQuery<UserSchema> = {}
   ): Promise<UserSchema | null> {
     return userModel.findOne(q).exec();
   }

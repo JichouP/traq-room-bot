@@ -1,12 +1,14 @@
 import { RequestHandler } from 'express';
-import { CLIENT_ID } from '@/env';
+import traqGetMe from '@/traQ/me';
 
-const loginCheck: RequestHandler = (req, res, next) => {
+const loginCheck: RequestHandler = async (req, res, next) => {
   if (!req.session || !req.session.user) {
-    res.redirect(
-      `https://q.trap.jp/api/v3/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}`
-    );
-    return;
+    return res.redirect('/login');
+  }
+  try {
+    await traqGetMe(req.session.user.token);
+  } catch (e) {
+    return res.redirect('/login');
   }
   next();
 };
