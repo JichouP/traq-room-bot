@@ -20,7 +20,7 @@ export const createRequestMock = (
 export const connectMock =
   (
     mongoose: Mongoose,
-    dbName: 'jest-routes' | 'jest-models' | 'jest-integration'
+    dbName: 'jest-controllers' | 'jest-models' | 'jest-integration'
   ) =>
   async (): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
