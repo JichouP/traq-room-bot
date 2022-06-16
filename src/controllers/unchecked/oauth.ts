@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { CLIENT_ID } from '@/env';
 import { user } from '@/models/user';
-import traqGetMe from '@/traQ/me';
+import traqGetMe from '@/traQ/traqGetMe';
 import postForm from '@/utils/postForm';
 
 type TokenResponse = {

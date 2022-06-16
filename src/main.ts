@@ -10,12 +10,11 @@ import morgan from 'morgan';
 import serveFavicon from 'serve-favicon';
 import internalServerError from './controllers/internalServerError';
 import notFound from './controllers/notFound';
-import login from './controllers/root/login';
-import logout from './controllers/root/logout';
-import oauth from './controllers/root/oauth';
 import loginCheck from './handlers/loginCheck';
 import { UserSchema } from './models/user';
-import root from './routes/root';
+import roomRouter from './routes/roomRouter';
+import rootRouter from './routes/rootRouter';
+import uncheckedRouter from './routes/uncheckedRouter';
 
 declare module 'express-session' {
   interface SessionData {
@@ -67,15 +66,16 @@ if (process.env.NODE_ENV !== 'test') {
   );
 }
 
-app.get('/oauth', oauth);
-app.get('/login', login);
-app.get('/logout', logout);
+app.use('/', uncheckedRouter);
 
 app.use(loginCheck);
 
-app.use('/', root);
+app.use('/', rootRouter);
+app.use('/room', roomRouter);
 
+// 404
 app.use('/', notFound);
+// 500
 app.use(internalServerError);
 
 if (process.env.NODE_ENV !== 'test') {
