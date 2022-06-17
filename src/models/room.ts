@@ -1,6 +1,6 @@
 import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { CreateDoc, FilterQuery } from 'mongoose';
+import { CreateDoc, FilterQuery, ProjectionType } from 'mongoose';
 
 export interface RoomSchema extends Base {}
 @modelOptions({
@@ -24,9 +24,10 @@ export const roomModel = getModelForClass(RoomSchema);
 
 export class Room {
   public async findList(
-    q: FilterQuery<RoomSchema> = {}
+    q: FilterQuery<RoomSchema> = {},
+    p: ProjectionType<RoomSchema> = {}
   ): Promise<RoomSchema[]> {
-    return roomModel.find(q).exec();
+    return roomModel.find(q, p).exec();
   }
   public async findOne(q: FilterQuery<RoomSchema>): Promise<RoomSchema | null> {
     return roomModel.findOne(q).exec();
