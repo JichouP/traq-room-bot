@@ -235,7 +235,9 @@
       );
 
       if (clubroomMembers.length === 0) {
-        $('<div>').text('部室に誰もいません').appendTo($('#clubroom-member'));
+        $('<div>', { class: 'text-center' })
+          .text('部室に誰もいません')
+          .appendTo($('#clubroom-member'));
       }
       if (progressRoomMembers.length === 0) {
         $('<div>', { class: 'text-center' })
