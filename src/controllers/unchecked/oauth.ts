@@ -40,11 +40,7 @@ const oauth: RequestHandler = async (req, res) => {
   });
 
   req.session.user = newUser;
-  res
-    .status(200)
-    .send(
-      'You have successfully registered. Please close this page and read the QR code again.'
-    );
+  res.redirect('/?status=oauth');
 };
 
 export default oauth;

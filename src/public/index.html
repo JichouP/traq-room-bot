@@ -197,8 +197,11 @@
                 <span>${
                   location.search.includes('joined')
                     ? '入室しました'
-                    : '退室しました'
-                }</span>
+                    : location.search.includes('left')
+                    ? '退室しました'
+                    : '認証に成功しました'
+                }
+                </span>
               </div>
             </div>`);
       };
