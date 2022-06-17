@@ -67,7 +67,6 @@ app.use(
 );
 app.use(morgan('combined', { skip: (_req, res) => res.statusCode < 400 }));
 app.use(serveFavicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -91,6 +90,7 @@ app.use('/', uncheckedRouter);
 
 app.use(loginCheck);
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', rootRouter);
 app.use('/room', roomRouter);
 
