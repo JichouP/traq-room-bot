@@ -10,9 +10,15 @@ const leave: RequestHandler = async (req, res) => {
   const targetRoom =
     req.query.room === 'progressRoom' ? 'progressRoom' : 'clubroom';
   const message = targetRoom === 'clubroom' ? '部室でた' : '進捗部屋でた';
+  const { trapId } = req.session.user;
+
+  if (!(await room.findOne({ trapId, room: targetRoom }))) {
+    return res.redirect('/');
+  }
+
   await traqPostMessage(req.session.user.token, CHANNEL_ID, message);
   await room.deleteOne({
-    trapId: req.session.user.trapId,
+    trapId,
     room: targetRoom,
   });
 
