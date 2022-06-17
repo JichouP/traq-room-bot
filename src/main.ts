@@ -7,10 +7,12 @@ import session from 'express-session';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import cron from 'node-cron';
 import serveFavicon from 'serve-favicon';
 import internalServerError from './controllers/internalServerError';
 import notFound from './controllers/notFound';
 import loginCheck from './handlers/loginCheck';
+import { roomModel } from './models/room';
 import { UserSchema } from './models/user';
 import roomRouter from './routes/roomRouter';
 import rootRouter from './routes/rootRouter';
@@ -103,5 +105,14 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`Listening at port ${PORT}`);
   });
 }
+
+// Clear Room at 0:00 daily
+cron.schedule(
+  '0 0 * * *',
+  async () => {
+    await roomModel.deleteMany({});
+  },
+  { timezone: 'Asia/Tokyo' }
+);
 
 export default app;
