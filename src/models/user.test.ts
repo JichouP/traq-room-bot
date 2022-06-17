@@ -3,9 +3,9 @@ import { userModel, UserSchema, user } from './user';
 import { connectMock, disconnectMock } from '@/utils/utils';
 
 const initUsers = [
-  { trapId: 'user1' },
-  { trapId: 'user2' },
-  { trapId: 'user3' },
+  { trapId: 'user1', token: '1', name: 'user1' },
+  { trapId: 'user2', token: '2', name: 'user2' },
+  { trapId: 'user3', token: '3', name: 'user3' },
 ];
 let users: UserSchema[] = [];
 
@@ -39,12 +39,18 @@ describe('model/user', () => {
   });
   describe('create', () => {
     test('should create user', async () => {
-      const doc = await user.create({ trapId: 'user4' });
+      const doc = await user.create({
+        trapId: 'user4',
+        name: 'user4',
+        token: '4',
+      });
       expect(doc.trapId).toBe('user4');
     });
     describe('validation', () => {
       test('should fail to create duplicate user', async () => {
-        await expect(user.create({ trapId: 'user1' })).rejects.toThrow();
+        await expect(
+          user.create({ trapId: 'user1', name: 'user1', token: '1' })
+        ).rejects.toThrow();
       });
       test('should fail to create blank user', async () => {
         await expect(
