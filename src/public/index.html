@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>traP 部室入退室管理システム</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.15.3/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      @keyframes bounce-reverse {
+        0%,
+        to {
+          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+          transform: none;
+        }
+        50% {
+          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+          transform: translateY(-25%);
+        }
+      }
+      .animate-bounce-reverse:hover {
+        animation: bounce-reverse 1s infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="layout"
+      class="flex flex-row justify-center w-full min-h-screen p-4 select-none"
+    >
+      <div class="flex flex-col max-w-4xl w-96 lg:min-w-full">
+        <header class="m-4 mb-8 text-3xl text-center">
+          traP 部室/進捗部屋<br />入退室管理システム
+        </header>
+        <div id="btn-group" class="m-2">
+          <div class="flex flex-row flex-wrap justify-center">
+            <div
+              class="w-56 h-16 m-2 btn btn-outline"
+              onclick="document.location.href='/room/join'"
+            >
+              <div class="flex flex-row justify-center w-12">
+                <svg
+                  class="w-8 h-8 text-base"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                  />
+                </svg>
+              </div>
+              <span class="flex-auto text-xl">部室に入る</span>
+            </div>
+            <div
+              class="w-56 h-16 m-2 btn btn-outline"
+              onclick="document.location.href='/room/leave'"
+            >
+              <div class="flex flex-row justify-center w-12">
+                <svg
+                  class="w-8 h-8 text-base"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6"
+                  />
+                </svg>
+              </div>
+              <span class="flex-auto text-xl">部室を出る</span>
+            </div>
+          </div>
+          <div class="flex flex-row flex-wrap justify-center">
+            <div
+              class="w-56 h-16 m-2 btn btn-outline"
+              onclick="document.location.href='/room/join?room=progressRoom'"
+            >
+              <div class="flex flex-row justify-center w-12">
+                <svg
+                  class="w-8 h-8 text-base"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                  />
+                </svg>
+              </div>
+              <span class="flex-auto text-xl">進捗部屋に入る</span>
+            </div>
+            <div
+              class="w-56 h-16 m-2 btn btn-outline"
+              onclick="document.location.href='/room/leave?room=progressRoom'"
+            >
+              <div class="flex flex-row justify-center w-12">
+                <svg
+                  class="w-8 h-8 text-base"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6"
+                  />
+                </svg>
+              </div>
+              <span class="flex-auto text-xl">進捗部屋を出る</span>
+            </div>
+          </div>
+        </div>
+        <div class="m-8 text-2xl text-center">入室者一覧</div>
+        <div
+          id="member-list"
+          class="flex flex-row flex-wrap justify-center m-2"
+        >
+          <div
+            id="clubroom"
+            class="p-4 m-2 border rounded-lg border-slate-500 w-72"
+          >
+            <div class="mb-2 text-lg text-center">部室</div>
+            <div id="clubroom-member">
+              <!-- template -->
+              <!-- <div class="flex flex-row items-center mb-2">
+                <div class="mr-2 avatar">
+                  <div class="w-6 rounded-full">
+                    <img src="https://q.trap.jp/api/v3/public/icon/JichouP" />
+                  </div>
+                </div>
+                <span>JichouP</span>
+              </div> -->
+            </div>
+          </div>
+          <div
+            id="progress-room"
+            class="p-4 m-2 border rounded-lg border-slate-500 w-72"
+          >
+            <div class="mb-2 text-lg text-center">進捗部屋</div>
+            <div id="progress-room-member"></div>
+          </div>
+        </div>
+        <div class="flex justify-between flex-1">
+          <div id="alert" class="flex flex-col justify-end"></div>
+          <div class="flex flex-col justify-end">
+            <div class="transition-opacity before:opacity-0">
+              Made with
+              <div class="inline-block animate-bounce-reverse">❤</div>
+              by JichouP
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      // alert
+
+      const showAlert = () => {
+        $('#alert').append(`
+            <div class="shadow-lg alert alert-success">
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="flex-shrink-0 w-6 h-6 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>${
+                  location.search.includes('joined')
+                    ? '入室しました'
+                    : '退室しました'
+                }</span>
+              </div>
+            </div>`);
+      };
+
+      const deleteAlert = () => {
+        $('#alert').empty();
+      };
+
+      // fire
+      if (location.search.includes('status=')) {
+        showAlert();
+        setTimeout(deleteAlert, 3000);
+      }
+
+      // member list
+
+      const getRoomStatus = async () => {
+        const request = new Request('/room/status', {
+          method: 'GET',
+        });
+        return fetch(request);
+      };
+
+      /**
+       * @type {{ name: string, room: 'clubroom' | 'progressRoom', createdAt: string }[]}
+       */
+      const members = await (await getRoomStatus()).json();
+      const clubroomMembers = members.filter((v) => v.room === 'clubroom');
+      const progressRoomMembers = members.filter(
+        (v) => v.room === 'progressRoom'
+      );
+
+      if (clubroomMembers.length === 0) {
+        $('<div>').text('部室に誰もいません').appendTo($('#clubroom-member'));
+      }
+      if (progressRoomMembers.length === 0) {
+        $('<div>', { class: 'text-center' })
+          .text('進捗部屋に誰もいません')
+          .appendTo($('#progress-room-member'));
+      }
+
+      clubroomMembers.forEach((v) => {
+        $(`<div class="flex flex-row items-center mb-2">
+            <div class="mr-2 avatar">
+              <div class="w-6 rounded-full">
+                <img src="https://q.trap.jp/api/v3/public/icon/${v.name}" />
+              </div>
+            </div>
+            <span>${v.name}</span>
+          </div>`).appendTo($('#clubroom-member'));
+      });
+
+      progressRoomMembers.forEach((v) => {
+        $(`<div class="flex flex-row items-center mb-2">
+            <div class="mr-2 avatar">
+              <div class="w-6 rounded-full">
+                <img src="https://q.trap.jp/api/v3/public/icon/${v.name}" />
+              </div>
+            </div>
+            <span>${v.name}</span>
+          </div>`).appendTo($('#progress-room-member'));
+      });
+    </script>
+  </body>
+</html>

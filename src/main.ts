@@ -38,7 +38,25 @@ if (process.env.NODE_ENV !== 'test') {
 const app = express();
 
 app.set('trust proxy', 1);
-app.use(helmet({}));
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: [
+          'cdn.tailwindcss.com',
+          'code.jquery.com',
+          "'unsafe-inline'",
+        ],
+        imgSrc: ['q.trap.jp', "'self'"],
+        scriptSrcAttr: null,
+      },
+    },
+    crossOriginResourcePolicy: {
+      policy: 'cross-origin',
+    },
+    crossOriginEmbedderPolicy: false,
+  })
+);
 app.use(
   cors({
     credentials: true,
@@ -47,6 +65,7 @@ app.use(
 );
 app.use(morgan('combined', { skip: (_req, res) => res.statusCode < 400 }));
 app.use(serveFavicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

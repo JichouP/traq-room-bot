@@ -16,7 +16,7 @@ const leave: RequestHandler = async (req, res) => {
     room: targetRoom,
   });
 
-  res.sendStatus(200);
+  res.redirect('/?status=left');
 };
 
 export default leave;

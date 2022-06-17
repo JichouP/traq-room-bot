@@ -18,7 +18,7 @@ const join: RequestHandler = async (req, res) => {
     room: targetRoom,
   });
 
-  res.sendStatus(200);
+  res.redirect('/?status=joined');
 };
 
 export default join;
